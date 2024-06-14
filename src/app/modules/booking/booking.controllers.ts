@@ -5,6 +5,7 @@ import { FacilityModel } from "../facility/facility.model";
 import { BookingStatus, IBooking } from "./booking.interface";
 import { BookingModel } from "./booking.model";
 import { bookingsServices } from "./booking.services";
+import { noDataFound } from "../../utils/noDataFound";
 
 const createBooking = catchAsync(async (req, res) => {
   const { facility, date, startTime, endTime } = req.body;
@@ -76,6 +77,9 @@ const getAllBookings = catchAsync(async (req, res) => {
 
 const getUserBookings = catchAsync(async (req, res) => {
   const result = await bookingsServices.getBookingsForUserDb(req.user!.id);
+  if (!result) {
+    return noDataFound(res);
+  }
   res.status(200).json({
     success: true,
     statusCode: 200,
@@ -84,8 +88,23 @@ const getUserBookings = catchAsync(async (req, res) => {
   });
 });
 
+const cancelUserBooking = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const result = await bookingsServices.cancelBookingUserDb(id);
+  if (!result) {
+    return noDataFound(res);
+  }
+  res.status(200).json({
+    success: true,
+    statusCode: 200,
+    message: "Booking cancelled successfully",
+    data: result,
+  });
+});
+
 export const bookingController = {
   createBooking,
   getAllBookings,
-  getUserBookings
+  getUserBookings,
+  cancelUserBooking,
 };

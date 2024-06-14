@@ -18,8 +18,14 @@ const getBookingsForUserDb = async (id: string) => {
   return bookings;
 };
 
+const cancelBookingUserDb = async (id: string) => {
+  const bookings = await BookingModel.findByIdAndUpdate(id,{isBooked: 'cancelled'}, {new: true});
+  return bookings;
+};
+
 export const bookingsServices = {
   createBookingsIntoDb,
   getAllBookingsFromDb,
   getBookingsForUserDb,
+  cancelBookingUserDb
 };

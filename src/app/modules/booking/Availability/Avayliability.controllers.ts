@@ -1,4 +1,5 @@
 import { catchAsync } from "../../../utils/catchAsync";
+import { noDataFound } from "../../../utils/noDataFound";
 import { BookingModel } from "../booking.model";
 
 const checkAvailability = catchAsync(async (req, res) => {
@@ -32,6 +33,10 @@ const checkAvailability = catchAsync(async (req, res) => {
         return bookingStart < slotStart && bookingEnd > slotEnd;
     })
   })
+
+  if (!availableSlots) {
+    return noDataFound(res);
+  }
 
   res.json({
     success: true,

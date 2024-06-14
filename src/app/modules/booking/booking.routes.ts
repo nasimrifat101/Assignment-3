@@ -11,4 +11,6 @@ router.get("/", jwtAuth, isAdmin, bookingController.getAllBookings);
 
 router.get("/user", jwtAuth, bookingController.getUserBookings);
 
+router.delete("/user/:id", jwtAuth, bookingController.cancelUserBooking);
+
 export { router as bookingRoute };

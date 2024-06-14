@@ -1,6 +1,6 @@
-
 import { facilityServices } from "./facility.services";
-import { catchAsync } from '../../utils/catchAsync';
+import { catchAsync } from "../../utils/catchAsync";
+import { noDataFound } from "../../utils/noDataFound";
 
 const createFacility = catchAsync(async (req, res) => {
   const facilityData = req.body;
@@ -9,6 +9,9 @@ const createFacility = catchAsync(async (req, res) => {
   }
 
   const result = await facilityServices.createFacilityIntoDb(facilityData);
+  if (!result) {
+    return noDataFound(res);
+  }
   res.status(200).json({
     success: true,
     statusCode: 200,
@@ -17,25 +20,25 @@ const createFacility = catchAsync(async (req, res) => {
   });
 });
 
-
-const updateFacility = catchAsync(async(req,res)=>{
-  const {id} = req.params;
+const updateFacility = catchAsync(async (req, res) => {
+  const { id } = req.params;
   const facilityData = req.body;
 
-  if(!id || !facilityData){
+  if (!id || !facilityData) {
     throw new Error("Data is invalid or null");
   }
 
   const result = await facilityServices.updateFacilityIntoDB(id, facilityData);
-
+  if (!result) {
+    return noDataFound(res);
+  }
   res.status(200).json({
     success: true,
     statusCode: 200,
     message: "Facility updated successfully",
     data: result,
   });
-})
-
+});
 
 const deleteFacility = catchAsync(async (req, res) => {
   const { id } = req.params;
@@ -43,6 +46,9 @@ const deleteFacility = catchAsync(async (req, res) => {
     throw new Error("Data is invalid or null");
   }
   const result = await facilityServices.deleteFacilityFromDB(id);
+  if (!result) {
+    return noDataFound(res);
+  }
   res.status(200).json({
     success: true,
     statusCode: 200,
@@ -53,6 +59,9 @@ const deleteFacility = catchAsync(async (req, res) => {
 
 const getFacility = catchAsync(async (req, res) => {
   const result = await facilityServices.getAllFacilityFromDB();
+  if (!result) {
+    return noDataFound(res);
+  }
   res.status(200).json({
     success: true,
     statusCode: 200,
@@ -61,10 +70,9 @@ const getFacility = catchAsync(async (req, res) => {
   });
 });
 
-
 export const facilityController = {
   createFacility,
   updateFacility,
   deleteFacility,
-  getFacility
+  getFacility,
 };
