@@ -6,18 +6,18 @@ import { BookingStatus, IBooking } from "./booking.interface";
 import { BookingModel } from "./booking.model";
 import { bookingsServices } from "./booking.services";
 
-
 const createBooking = catchAsync(async (req, res) => {
   const { facility, date, startTime, endTime } = req.body;
 
-  const existingBooking = await BookingModel.find({ facility, date });
+  const existingBookings = await BookingModel.find({ facility, date });
 
-  const isAvailable = !existingBooking.some((booking) => {
-    const bookingStart = new Date(booking.startTime).getHours();
-    const bookingEnd = new Date(booking.endTime).getHours();
-    const slotStart = new Date(startTime).getHours();
-    const slotEnd = new Date(endTime).getHours();
-    return bookingStart <= slotStart && bookingEnd >= slotEnd;
+  const slotStart = new Date(`${date}T${startTime}`).getTime();
+  const slotEnd = new Date(`${date}T${endTime}`).getTime();
+
+  const isAvailable = !existingBookings.some((booking) => {
+    const bookingStart = new Date(`${booking.date}T${booking.startTime}`).getTime();
+    const bookingEnd = new Date(`${booking.date}T${booking.endTime}`).getTime();
+    return (slotStart < bookingEnd && slotEnd > bookingStart);
   });
 
   if (!isAvailable) {
@@ -34,18 +34,7 @@ const createBooking = catchAsync(async (req, res) => {
     return res.status(404).json({ success: false, message: "Facility not found" });
   }
 
-
   const payableAmount = CalculateAmount(startTime, endTime, facilityData.pricePerHour);
-
-  // Debugging log
-  console.log('Calculated payable amount:', payableAmount);
-
-  if (isNaN(payableAmount)) {
-    return res.status(500).json({
-      success: false,
-      message: 'Failed to calculate payable amount',
-    });
-  }
 
   const bookingsData: IBooking = {
     date,
@@ -67,6 +56,18 @@ const createBooking = catchAsync(async (req, res) => {
   });
 });
 
+
+const getAllBookings = catchAsync(async(req,res)=>{
+  const result = await bookingsServices.getAllBookingsFromDb();
+  res.status(200).json({
+    success: true,
+    statusCode: 200,
+    message: "Bookings retrieved successfully",
+    data: result,
+  });
+})
+
 export const bookingController = {
   createBooking,
+  getAllBookings
 };

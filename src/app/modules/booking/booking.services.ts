@@ -6,6 +6,15 @@ const createBookingsIntoDb = async (data: IBooking) => {
   return result;
 };
 
+
+const getAllBookingsFromDb = async () => {
+  const bookings = await BookingModel.find()
+    .populate('facility')
+    .populate('user');
+  return bookings;
+};
+
 export const bookingsServices = {
   createBookingsIntoDb,
+  getAllBookingsFromDb
 };
