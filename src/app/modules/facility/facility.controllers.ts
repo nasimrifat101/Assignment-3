@@ -51,9 +51,20 @@ const deleteFacility = catchAsync(async (req, res) => {
   });
 });
 
+const getFacility = catchAsync(async (req, res) => {
+  const result = await facilityServices.getAllFacilityFromDB();
+  res.status(200).json({
+    success: true,
+    statusCode: 200,
+    message: "Facility fetched successfully",
+    data: result,
+  });
+});
+
 
 export const facilityController = {
   createFacility,
   updateFacility,
-  deleteFacility
+  deleteFacility,
+  getFacility
 };

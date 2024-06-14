@@ -16,10 +16,14 @@ const deleteFacilityFromDB = async(id:string)=>{
   return result;
 }
 
-const get
+const getAllFacilityFromDB=async()=>{
+  const result = await FacilityModel.find({isDeleted: false});
+  return result;
+}
 
 export const facilityServices = {
   createFacilityIntoDb,
   updateFacilityIntoDB,
-  deleteFacilityFromDB
+  deleteFacilityFromDB,
+  getAllFacilityFromDB
 };

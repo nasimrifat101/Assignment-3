@@ -27,6 +27,13 @@ router.delete(
     "/:id", 
     jwtAuth, 
     isAdmin, 
-    facilityController.deleteFacility);
+    facilityController.deleteFacility
+  );
+
+router.get(
+  "/", 
+  jwtAuth, 
+  facilityController.getFacility
+);
 
 export { router as facilityRoutes };
