@@ -490,5 +490,8 @@ The server will start running at `http://localhost:5000`.
 5. **Zod Validation:**
    - The API employs Zod for input validation to ensure data consistency. When validation fails, a `400 Bad Request` status code is returned, accompanied by detailed error messages specifying the erroneous fields and reasons.
 
-
+---
+### Note
+- I have run into several problems with Git while working on this project due to issues with my low configuration laptop and electricity problems. I had to delete three other repositories, causing me to lose my 70+ commit history. This repository is now my fourth attempt.
+- Thank you for taking my thoughts/feelings/well-being into account.
 ---
