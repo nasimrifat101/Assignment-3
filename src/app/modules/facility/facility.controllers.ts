@@ -56,7 +56,7 @@ const getFacility = catchAsync(async (req, res) => {
   res.status(200).json({
     success: true,
     statusCode: 200,
-    message: "Facility fetched successfully",
+    message: "Facilities retrieved successfully",
     data: result,
   });
 });

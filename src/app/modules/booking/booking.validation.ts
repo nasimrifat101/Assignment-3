@@ -2,9 +2,9 @@ import { z } from "zod";
 import { BookingStatus } from "./booking.interface";
 
 export const bookingValidation = z.object({
-  date: z.string().nonempty("Date is required"),
-  startTime: z.string().nonempty("Start time is required"),
-  endTime: z.string().nonempty("End time is required"),
+  date: z.string(),
+  startTime: z.string(),
+  endTime: z.string(),
   user: z.string().nonempty("User ID is required"),
   facility: z.string().nonempty("Facility ID is required"),
   payableAmount: z.number().positive("Payable amount must be positive"),
