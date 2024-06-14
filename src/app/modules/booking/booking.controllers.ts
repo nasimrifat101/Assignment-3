@@ -15,9 +15,11 @@ const createBooking = catchAsync(async (req, res) => {
   const slotEnd = new Date(`${date}T${endTime}`).getTime();
 
   const isAvailable = !existingBookings.some((booking) => {
-    const bookingStart = new Date(`${booking.date}T${booking.startTime}`).getTime();
+    const bookingStart = new Date(
+      `${booking.date}T${booking.startTime}`
+    ).getTime();
     const bookingEnd = new Date(`${booking.date}T${booking.endTime}`).getTime();
-    return (slotStart < bookingEnd && slotEnd > bookingStart);
+    return slotStart < bookingEnd && slotEnd > bookingStart;
   });
 
   if (!isAvailable) {
@@ -31,10 +33,16 @@ const createBooking = catchAsync(async (req, res) => {
   const facilityData = await FacilityModel.findById(facility);
 
   if (!facilityData) {
-    return res.status(404).json({ success: false, message: "Facility not found" });
+    return res
+      .status(404)
+      .json({ success: false, message: "Facility not found" });
   }
 
-  const payableAmount = CalculateAmount(startTime, endTime, facilityData.pricePerHour);
+  const payableAmount = CalculateAmount(
+    startTime,
+    endTime,
+    facilityData.pricePerHour
+  );
 
   const bookingsData: IBooking = {
     date,
@@ -56,8 +64,7 @@ const createBooking = catchAsync(async (req, res) => {
   });
 });
 
-
-const getAllBookings = catchAsync(async(req,res)=>{
+const getAllBookings = catchAsync(async (req, res) => {
   const result = await bookingsServices.getAllBookingsFromDb();
   res.status(200).json({
     success: true,
@@ -65,9 +72,20 @@ const getAllBookings = catchAsync(async(req,res)=>{
     message: "Bookings retrieved successfully",
     data: result,
   });
-})
+});
+
+const getUserBookings = catchAsync(async (req, res) => {
+  const result = await bookingsServices.getBookingsForUserDb(req.user!.id);
+  res.status(200).json({
+    success: true,
+    statusCode: 200,
+    message: "Bookings retrieved successfully",
+    data: result,
+  });
+});
 
 export const bookingController = {
   createBooking,
-  getAllBookings
+  getAllBookings,
+  getUserBookings
 };

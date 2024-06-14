@@ -20,6 +20,6 @@ export const jwtAuth = (req: Request, res: Response, next: NextFunction) => {
     next();
   } catch (error) {
     console.error("Error in authentication middleware:", error);
-    res.status(403).json({ message: "Forbidden" });
+    res.status(403).json({ message: "Token expired" });
   }
 };
