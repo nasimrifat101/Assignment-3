@@ -3,6 +3,7 @@ import { userRoute } from "../modules/user/user.routes";
 import { facilityRoutes } from "../modules/facility/facility.routes";
 import { authRoute } from "../modules/user/auth/auth.routes";
 import { availabilityRoute } from "../modules/booking/Availability/Availability.routes";
+import { bookingRoute } from "../modules/booking/booking.routes";
 
 const router = Router();
 
@@ -19,6 +20,10 @@ const moduleRoutes = [
     path: "/facility",
     route: facilityRoutes,
   },
+  {
+    path: "/bookings",
+    route: bookingRoute,
+  }
 ];
 
 moduleRoutes.forEach(({ path, route }) => {
